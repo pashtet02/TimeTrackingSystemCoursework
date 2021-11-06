@@ -20,14 +20,7 @@ public List<TimeReport> getAllTimeReports(){
         return timeReportRepo.findAll();
     }
 
-
-    public void save(LocalDateTime createdAt, Integer hours, User user) {
-        TimeReport report = new TimeReport();
-        report.setHours(hours);
-        report.setCreatedAt(createdAt);
-        report.setOvertime(false);
-        report.setAuthor(user);
-
+    public void save(TimeReport report) {
         timeReportRepo.save(report);
     }
 

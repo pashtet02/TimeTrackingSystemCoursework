@@ -23,7 +23,7 @@
                 <th><#if employee.firstName??>${employee.firstName}</#if></th>
                 <th><#if employee.secondName??>${employee.secondName}</#if></th>
                 <th><a href="/company/statistics/${employee.id}">statistics</a></th>
-                <th><a href="/company/fire/${employee.id}">fire</a></th>
+                <th><a href="/employer/fire/${employee.id}">fire</a></th>
             </tr>
         </#list>
         </tbody>

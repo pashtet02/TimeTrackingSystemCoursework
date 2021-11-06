@@ -5,10 +5,16 @@
         <@l.logout/>
     </div>
 <div>
-    <form method="post" action="/main" enctype="multipart/form-data">
-        <input type="datetime-local" name="createdAt" placeholder="Введіть дату" />
+    <form method="post" action="/main">
+        <input type="text" name="description" placeholder="Введіть опис">
         <input type="number" name="hours" placeholder="Введіть кількість годин">
-        <input type="file" name="file">
+        <input type="checkbox" name="isOvertime">
+        <div><label>Type: <select name="reportType" id="type">
+                    <option value="work">Work</option>
+                    <option value="vacation">Vacation</option>
+                    <option value="sickLeave">Sick leave</option>
+                    <option value="other">Other</option>
+                </select></label></div>
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit">Додати</button>
     </form>

@@ -75,10 +75,6 @@ public class CompanyController {
         return "companyInfo";
     }
 
-    /*@PostMapping
-    @PreAuthorize("hasAuthority('EMPLOYER')")
-    public String fireEmployee*/
-
     @PostMapping()
     @PreAuthorize("hasAuthority('EMPLOYER')")
     public String createCompany(

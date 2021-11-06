@@ -43,10 +43,32 @@ public class EmployerController {
         return "employeeList";
     }
 
+    @GetMapping("/fire/{employee}")
+    @PreAuthorize("hasAuthority('EMPLOYER')")
+    public String getFireEmployeePage(@PathVariable User employee, Model model){
+        model.addAttribute("employee", employee);
+        return "firingPage";
+    }
+
+    @PostMapping("/fire/{employee}")
+    @PreAuthorize("hasAuthority('EMPLOYER')")
+    public String fireEmployee(@RequestParam("reason") String reason,
+                               @PathVariable User employee){
+        if (!StringUtils.isEmpty(employee.getEmail())) {
+            String message = String.format(
+                    "Dear, %s! \n" +
+                            "You was fired from a company %s! Reason: %s",
+                    employee.getUsername(), employee.getCompany().getName(), reason);
+
+            mailSender.send(employee.getEmail(), "Firing letter", message);
+        }
+        return "redirect:/company";
+    }
+
     @PostMapping("/inviteEmployee/{employee}")
     public String inviteEmployee(@PathVariable User employee,
                                  @RequestParam(name = "companyName") String companyName){
-        employee.setInvitationCode(UUID.randomUUID().toString());
+        employee.setCompany(null);
         userService.save(employee);
         if (!StringUtils.isEmpty(employee.getEmail())) {
             String message = String.format(

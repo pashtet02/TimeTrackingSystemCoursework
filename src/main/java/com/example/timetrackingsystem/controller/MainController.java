@@ -2,10 +2,10 @@ package com.example.timetrackingsystem.controller;
 
 import com.example.timetrackingsystem.model.TimeReport;
 import com.example.timetrackingsystem.model.User;
+import com.example.timetrackingsystem.model.role.ReportType;
 import com.example.timetrackingsystem.service.ReportService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Controller
 @Slf4j
@@ -29,11 +29,11 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(@AuthenticationPrincipal User user,
-            @RequestParam(required = false, name = "filterHours") String filterHours,
+                       @RequestParam(required = false, name = "filterHours") String filterHours,
                        Model model) {
         Iterable<TimeReport> reports;
 
-        if (filterHours != null){
+        if (filterHours != null) {
             reports = reportService.findByHours(Integer.valueOf(filterHours));
         } else {
             reports = reportService.getUserTimeReports(user.getId());
@@ -47,15 +47,37 @@ public class MainController {
     @PostMapping("/main")
     public String add(
             @AuthenticationPrincipal User user,
-            @RequestParam(name = "createdAt")
-                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdAt,
-                      @RequestParam Integer hours, Model model) {
-        reportService.save(createdAt, hours, user);
+            @RequestParam Integer hours,
+            @RequestParam(name = "description") String description,
+            @RequestParam(name = "isOvertime") Boolean isOvertime,
+            @RequestParam(name = "reportType") String type) {
+        Timestamp createdAt = Timestamp.from(Instant.now());
 
-        List<TimeReport> reports = reportService.getUserTimeReports(user.getId());
+        ReportType reportType;
 
-        model.addAttribute("reports", reports);
+        switch (type) {
+            case "vacation":
+                reportType = ReportType.VACATION;
+                break;
+            case "sickLeave":
+                reportType = ReportType.SICK_LEAVE;
+                break;
+            case "work":
+                reportType = ReportType.WORK;
+                break;
+            default:
+                reportType = ReportType.OTHER;
+        }
 
-        return "main";
+        TimeReport report = TimeReport.builder()
+                .reportType(reportType)
+                .createdAt(createdAt)
+                .author(user)
+                .hours(hours)
+                .description(description)
+                .isOvertime(isOvertime)
+                .build();
+        reportService.save(report);
+        return "redirect:/main";
     }
 }

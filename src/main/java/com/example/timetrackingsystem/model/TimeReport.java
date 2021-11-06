@@ -1,10 +1,11 @@
 package com.example.timetrackingsystem.model;
 
+import com.example.timetrackingsystem.model.role.ReportType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @AllArgsConstructor
@@ -20,9 +21,16 @@ public class TimeReport implements Serializable {
     @JoinColumn(name = "user_id")
     private User author;
 
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     private Integer hours;
 
     private boolean isOvertime;
+
+    @CollectionTable(name = "time_report_type",
+            joinColumns = @JoinColumn(name = "report_id"))
+    @Enumerated(EnumType.STRING)
+    private ReportType reportType;
+
+    private String description;
 }
