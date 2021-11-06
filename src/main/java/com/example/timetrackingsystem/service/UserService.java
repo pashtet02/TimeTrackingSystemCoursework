@@ -1,5 +1,7 @@
 package com.example.timetrackingsystem.service;
 
+import com.example.timetrackingsystem.exception.CompanyNotFoundException;
+import com.example.timetrackingsystem.model.Company;
 import com.example.timetrackingsystem.model.User;
 import com.example.timetrackingsystem.model.role.Role;
 import com.example.timetrackingsystem.repos.UserRepo;
@@ -25,6 +27,7 @@ public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final MailSender mailSender;
+    private final CompanyService companyService;
 
 
     public User save(User user) {
@@ -41,8 +44,8 @@ public class UserService implements UserDetailsService {
         return userRepo.findByUsername(username);
     }
 
-    public List<User> getAllUsersByRole(Role role) {
-        return userRepo.findByRoles(role);
+    public List<User> getAllFreeEmployees(Role role) {
+        return userRepo.findByRolesAndCompanyIsNull(role);
     }
 
     public List<User> getAllEmployeesByCompany(long companyId) {
@@ -91,6 +94,18 @@ public class UserService implements UserDetailsService {
             return false;
         }
         user.setActivationCode(null);
+        userRepo.save(user);
+        return true;
+    }
+
+    public boolean inviteUser(String code, String companyName) {
+        User user = userRepo.findByInvitationCode(code);
+        Company company = companyService.findByName(companyName).orElseThrow(CompanyNotFoundException::new);
+        if (user == null) {
+            return false;
+        }
+        user.setInvitationCode(null);
+        user.setCompany(company);
         userRepo.save(user);
         return true;
     }

@@ -36,7 +36,7 @@ public class MainController {
         if (filterHours != null){
             reports = reportService.findByHours(Integer.valueOf(filterHours));
         } else {
-            reports = reportService.getAllTimeReports();
+            reports = reportService.getUserTimeReports(user.getId());
         }
         model.addAttribute("user", user);
         model.addAttribute("reports", reports);
@@ -52,7 +52,7 @@ public class MainController {
                       @RequestParam Integer hours, Model model) {
         reportService.save(createdAt, hours, user);
 
-        List<TimeReport> reports = reportService.getAllTimeReports();
+        List<TimeReport> reports = reportService.getUserTimeReports(user.getId());
 
         model.addAttribute("reports", reports);
 

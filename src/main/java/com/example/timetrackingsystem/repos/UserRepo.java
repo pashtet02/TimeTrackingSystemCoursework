@@ -12,10 +12,12 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
 /*    @Query(value = "select u.id, u.active, u.password, u.first_name, u.second_name, u.username " +
             "from user as u inner join user_role as ur where u.id = ur.user_id and ur.roles = ?1")*/
-    List<User> findByRoles(Role role);
+    List<User> findByRolesAndCompanyIsNull(Role role);
 
     @Query(value = "SELECT u.* FROM user u WHERE u.company_id = ?1", nativeQuery = true)
     List<User> findByCompanyId(long companyId);
 
     User findByActivationCode(String code);
+
+    User findByInvitationCode(String code);
 }

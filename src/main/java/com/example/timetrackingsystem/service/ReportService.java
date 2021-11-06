@@ -16,10 +16,10 @@ import java.util.List;
 public class ReportService {
 
     private final TimeReportRepo timeReportRepo;
-
-    public List<TimeReport> getAllTimeReports(){
+public List<TimeReport> getAllTimeReports(){
         return timeReportRepo.findAll();
     }
+
 
     public void save(LocalDateTime createdAt, Integer hours, User user) {
         TimeReport report = new TimeReport();
@@ -36,5 +36,9 @@ public class ReportService {
             throw new RuntimeException("Hours cannot be less than 0 or more than 24");
         }
         return timeReportRepo.findByHours(hours);
+    }
+
+    public List<TimeReport> getUserTimeReports(long userId) {
+    return timeReportRepo.findByAuthorId(userId);
     }
 }

@@ -28,6 +28,8 @@ public class User implements Serializable, UserDetails {
 
     private String activationCode;
 
+    private String invitationCode;
+
     private String password;
 
     private boolean active;

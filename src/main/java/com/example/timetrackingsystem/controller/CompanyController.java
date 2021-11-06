@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -41,9 +42,14 @@ public class CompanyController {
     public String companyInfo(
             @AuthenticationPrincipal User user,
             Model model){
-        Company companyByUserId = companyService.getByDirectorId(user.getId());
+        Company company = null;
+        if (user.getCompany() != null){
+            company = user.getCompany();
+        } else {
+            company = companyService.getByDirectorId(user.getId());
+        }
         log.info("companyInfo: user.getCompany(): " + user.getCompany());
-        model.addAttribute("company", companyByUserId);
+        model.addAttribute("company", company);
         return "companyInfo";
     }
 
@@ -100,6 +106,11 @@ public class CompanyController {
 
             company.setImage(resultFilename);
         }
+
+
+        Optional<Company> companyOptional = companyService.findByName(company.getName());
+        if (companyOptional.isPresent())
+            throw new RuntimeException("Such company already exists");
 
         companyService.save(company);
 

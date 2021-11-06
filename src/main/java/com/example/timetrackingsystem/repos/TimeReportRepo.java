@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TimeReportRepo extends JpaRepository<TimeReport, Long> {
     List<TimeReport> findByHours(Integer hours);
+
+    List<TimeReport> findByAuthorId(long userId);
 }
