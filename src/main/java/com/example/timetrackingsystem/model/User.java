@@ -26,6 +26,8 @@ public class User implements Serializable, UserDetails {
 
     private String email;
 
+    private String profilePhoto;
+
     private String activationCode;
 
     private String invitationCode;
@@ -66,6 +68,31 @@ public class User implements Serializable, UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public boolean isAdmin(){
+        if (roles != null){
+            return roles.contains(Role.ADMIN);
+        }
+        return false;
+    }
+
+    public boolean isEmployee(){
+        if (roles != null){
+            return roles.contains(Role.EMPLOYEE);
+        }
+        return false;
+    }
+
+    public boolean isEmployer(){
+        if (roles != null){
+            return roles.contains(Role.EMPLOYER);
+        }
+        return false;
+    }
+
+    public boolean hasCompany(){
+        return company == null;
     }
 
     @Override

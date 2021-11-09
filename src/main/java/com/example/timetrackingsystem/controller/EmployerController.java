@@ -54,6 +54,8 @@ public class EmployerController {
     @PreAuthorize("hasAuthority('EMPLOYER')")
     public String fireEmployee(@RequestParam("reason") String reason,
                                @PathVariable User employee){
+        employee.setCompany(null);
+        userService.save(employee);
         if (!StringUtils.isEmpty(employee.getEmail())) {
             String message = String.format(
                     "Dear, %s! \n" +
@@ -68,7 +70,7 @@ public class EmployerController {
     @PostMapping("/inviteEmployee/{employee}")
     public String inviteEmployee(@PathVariable User employee,
                                  @RequestParam(name = "companyName") String companyName){
-        employee.setCompany(null);
+        employee.setInvitationCode(UUID.randomUUID().toString());
         userService.save(employee);
         if (!StringUtils.isEmpty(employee.getEmail())) {
             String message = String.format(

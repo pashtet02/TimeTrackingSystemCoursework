@@ -46,7 +46,7 @@ public class RegistrationController {
             model.addAttribute("message", "User exists!");
             return "registration";
         }
-        model.addAttribute("message", "Activation code waw went on your email!");
+        model.addAttribute("message", "Activation code was sent on your email!");
         return "redirect:/login";
     }
 

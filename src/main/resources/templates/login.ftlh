@@ -1,8 +1,8 @@
 <#import "parts/common.ftlh" as c>
 <#import "parts/login.ftlh" as l>
 <@c.page>
-<h3>Login page</h3>
-    ${message!}
-<@l.login "/login"/>
-<a href="/registration">New here? Register!</a><br>
+    <#if message??>
+        <span>${message}</span>
+    </#if>
+<@l.login "/login" false/>
 </@c.page>

@@ -1,3 +1,6 @@
+<#include "security.ftlh">
+<#import "login.ftlh" as l>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Timer</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -10,20 +13,27 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Home</a>
             </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/main">Main</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Main</a>
+            </li>
+            <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" href="/user">ALL Users</a>
                 </li>
+            </#if>
+            <#if isEmployer>
                 <li class="nav-item">
                     <a class="nav-link" href="/employer/invite">Invite users</a>
                 </li>
+            </#if>
+            <#if isEmployer || hasCompany>
             <li class="nav-item">
                 <a class="nav-link" href="/company">Company page</a>
             </li>
+            </#if>
         </ul>
 
-        <div class="navbar-text mr-3"></div>
+        <div class="navbar-text mr-3">${name}</div>
+        <@l.logout/>
     </div>
 </nav>
