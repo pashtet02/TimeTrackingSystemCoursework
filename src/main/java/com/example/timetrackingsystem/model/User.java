@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-public class User implements Serializable, UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -92,7 +92,7 @@ public class User implements Serializable, UserDetails {
     }
 
     public boolean hasCompany(){
-        return company == null;
+        return company != null;
     }
 
     @Override

@@ -14,8 +14,9 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(Exception ex) {
+    public String handleException(Exception ex, Model model) {
         log.error("handleException: message {}", ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
         return "400";
     }
 

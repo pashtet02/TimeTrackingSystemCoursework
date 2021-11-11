@@ -5,14 +5,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class TimeReport implements Serializable {
+public class TimeReport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,7 +21,7 @@ public class TimeReport implements Serializable {
     @JoinColumn(name = "user_id")
     private User author;
 
-    private Timestamp createdAt;
+    private Date createdAt;
 
     private Integer hours;
 

@@ -9,7 +9,7 @@ known = Session.SPRING_SECURITY_CONTEXT??
     isAdmin = user.isAdmin()
     isEmployer = user.isEmployer()
     isEmployee = user.isEmployee()
-        hasCompany = user.hasCompany()
+    hasCompany = user.hasCompany()
     >
 <#else>
     <#assign
@@ -17,6 +17,6 @@ known = Session.SPRING_SECURITY_CONTEXT??
     isAdmin = false
     isEmployer = false
     isEmployee = false
-        hasCompany = false
+    hasCompany = false
     >
 </#if>

@@ -3,7 +3,6 @@ package com.example.timetrackingsystem.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -12,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Company implements Serializable {
+public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,6 +19,9 @@ public class Company implements Serializable {
     private String name;
     private String image;
     private String country;
+    private String address;
+    private String email;
+    private String webSite;
 
     @OneToOne
     @JoinColumn(name = "director_id")

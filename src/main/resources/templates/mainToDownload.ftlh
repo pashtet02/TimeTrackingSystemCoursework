@@ -1,20 +1,14 @@
-<#import "parts/common.ftlh" as c>
-<#import "parts/login.ftlh" as l>
-<@c.page>
-<#--<div class="form-row">
-    <div class="form-group col-md-6">
-        <form method="get" action="main">
-            <input class="form-control col-sm-3" type="number" min="0" max="24" name="filterHours"
-                   value="<#if filterHours??>${filterHours}</#if>">
-            <button type="submit" class="btn btn-primary ml-2">Find by hours</button>
-        </form>
-    </div>
-</div>-->
-    <a class="btn btn-primary" data-toggle="collapse" href="#addReport" role="button" aria-expanded="false"
-       aria-controls="collapseExample">
-        Create new report
-    </a>
-    <#if addReport!true>
+<#--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Timer</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="container mt-5">
+<#if addReport!true>
     <div class="collapse" id="addReport">
         <div class="form-group mt-3">
             <form method="post" action="/main">
@@ -46,11 +40,11 @@
             </form>
         </div>
     </div>
-    </#if>
-    <#if downloadReport!false>
-        <a class="btn btn-primary" href="/download/${user.id}">Download reports</a>
-    </#if>
-    <div class="mt-2">
+</#if>
+<#if downloadReport!false>
+    <a class="btn btn-primary" href="/download/${user.id}">Download reports</a>
+</#if>
+<div class="mt-2">
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
@@ -77,5 +71,16 @@
         </#list>
         </tbody>
     </table>
+</div>
     </div>
-</@c.page>
+    </body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example</title>
+</head>
+<body>
+<p>This is an example of a simple HTML page with one paragraph.</p>
+</body>
+</html>

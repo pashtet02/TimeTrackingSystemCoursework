@@ -2,8 +2,10 @@ package com.example.timetrackingsystem.controller;
 
 import com.example.timetrackingsystem.exception.CompanyNotFoundException;
 import com.example.timetrackingsystem.model.Company;
+import com.example.timetrackingsystem.model.TimeReport;
 import com.example.timetrackingsystem.model.User;
 import com.example.timetrackingsystem.service.CompanyService;
+import com.example.timetrackingsystem.service.ReportService;
 import com.example.timetrackingsystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,10 +31,12 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final UserService userService;
+    private final ReportService reportService;
 
-    public CompanyController(CompanyService companyService, UserService userService) {
+    public CompanyController(CompanyService companyService, UserService userService, ReportService reportService) {
         this.companyService = companyService;
         this.userService = userService;
+        this.reportService = reportService;
     }
 
     @GetMapping
@@ -75,18 +76,37 @@ public class CompanyController {
         return "companyInfo";
     }
 
+    @GetMapping("/statistics/{employee}")
+    @PreAuthorize("hasAuthority('EMPLOYER')")
+    public String getEmployeeStatistics(@PathVariable User employee, Model model){
+        Iterable<TimeReport> reports;
+        reports = reportService.getUserTimeReports(employee.getId());
+
+        model.addAttribute("user", employee);
+        model.addAttribute("reports", reports);
+        model.addAttribute("addReport", false);
+        model.addAttribute("downloadReport", true);
+        return "main";
+    }
+
     @PostMapping()
     @PreAuthorize("hasAuthority('EMPLOYER')")
     public String createCompany(
             @AuthenticationPrincipal User user,
             @RequestParam(name = "companyName") String companyName,
-            @RequestParam(name = "companyCountry") String companyCountry, Model model,
+            @RequestParam(name = "companyCountry") String companyCountry,
+            @RequestParam(name = "companyEmail", required = false) String companyEmail,
+            @RequestParam(name = "companyAddress", required = false) String companyAddress,
+            @RequestParam(name = "companyWebSite", required = false) String companyWebSite,Model model,
             @RequestParam(value = "image", required = false) MultipartFile file
     ) throws IOException {
         Company company = new Company();
         company.setCountry(companyCountry);
         company.setDirector(user);
         company.setName(companyName);
+        company.setEmail(companyEmail);
+        company.setAddress(companyAddress);
+        company.setWebSite(companyWebSite);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);

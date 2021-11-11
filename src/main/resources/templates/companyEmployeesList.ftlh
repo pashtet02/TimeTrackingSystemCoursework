@@ -1,37 +1,8 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
 
 <@c.page>
-    <h2>List of all ${company.name}`s company employees</h2>
-    <div class="mt-2">
-        <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">NickName</th>
-                <th scope="col">Position</th>
-                <th scope="col">Email</th>
-                <th scope="col">First name</th>
-                <th scope="col">Second Name</th>
-                <th scope="col">Statistics</th>
-                <th scope="col">Fire</th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list employees as employee>
-                <tr>
-                    <th>${employee.id}</th>
-                    <th>${employee.username}</th>
-                    <th><#if employee.position??>${employee.position}</#if></th>
-                    <th><#if employee.email??>${employee.email}</#if></th>
-                    <th><#if employee.firstName??>${employee.firstName}</#if></th>
-                    <th><#if employee.secondName??>${employee.secondName}</#if></th>
-                    <th><a href="/company/statistics/${employee.id}">statistics</a></th>
-                    <th><a href="/employer/fire/${employee.id}">Fire ${employee.firstName}</a></th>
-                </tr>
-            </#list>
-            </tbody>
-        </table>
-    </div>
+    <h2>${company.name}`s employees list</h2>
     <div class="card-columns">
         <#list employees as employee>
             <div class="card my-3">
@@ -39,16 +10,20 @@
                     <img src="/img/${employee.profilePhoto}" class="card-img-top">
                 </#if>
                 <div class="m-2">
-                    <span>${employee.username}</span>
-                    <span><#if employee.position??>${employee.position}</#if></span>
-                    <span><#if employee.email??>${employee.email}</#if></span>
-                    <span><#if employee.firstName??>${employee.firstName}</#if></span>
-                    <span><#if employee.secondName??>${employee.secondName}</#if></span>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Username: ${employee.username}</li>
+                        <#if employee.position??><li class="list-group-item">Position ${employee.position}</li></#if>
+                        <#if employee.email??><li class="list-group-item">Email: ${employee.email}</li></#if>
+                        <#if employee.firstName??><li class="list-group-item">First name: ${employee.firstName}</li></#if>
+                        <#if employee.secondName??><li class="list-group-item">Second Name: ${employee.secondName}</li></#if>
+                    </ul>
                 </div>
+                <#if isEmployer>
                 <div class="card-footer text-muted">
-                    <a href="/company/statistics/${employee.id}">statistics</a>
-                    <a href="/employer/fire/${employee.id}">Fire ${employee.firstName}</a>
+                    <a class="btn btn-info" href="/company/statistics/${employee.id}">Statistics</a>
+                    <a class="btn btn-danger" href="/employer/fire/${employee.id}">Fire ${employee.firstName}</a>
                 </div>
+                </#if>
             </div>
         <#else>
             No employees

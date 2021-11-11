@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.time.Instant;
+import java.time.temporal.TemporalField;
+import java.util.Calendar;
 
 @Controller
 @Slf4j
@@ -41,6 +43,7 @@ public class MainController {
         model.addAttribute("user", user);
         model.addAttribute("reports", reports);
         model.addAttribute("filterHours", filterHours);
+        model.addAttribute("addReport", true);
         return "main";
     }
 
@@ -51,7 +54,7 @@ public class MainController {
             @RequestParam(name = "description") String description,
             @RequestParam(name = "isOvertime") Boolean isOvertime,
             @RequestParam(name = "reportType") String type) {
-        Timestamp createdAt = Timestamp.from(Instant.now());
+        Date createdAt = new Date(Calendar.getInstance().getTime().getTime());
 
         ReportType reportType;
 
