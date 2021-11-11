@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
-public class User implements UserDetails {
+public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -27,6 +27,8 @@ public class User implements UserDetails {
     private String email;
 
     private String profilePhoto;
+
+    private String image;
 
     private String activationCode;
 

@@ -5,15 +5,18 @@ import com.example.timetrackingsystem.model.Company;
 import com.example.timetrackingsystem.model.User;
 import com.example.timetrackingsystem.model.role.Role;
 import com.example.timetrackingsystem.repos.UserRepo;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +24,21 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class UserService implements UserDetailsService {
+    @Value("${upload.path}")
+    private String uploadPath;
+
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final MailSender mailSender;
     private final CompanyService companyService;
+
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder, MailSender mailSender, CompanyService companyService) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.companyService = companyService;
+    }
 
 
     public User save(User user) {
@@ -73,16 +85,7 @@ public class UserService implements UserDetailsService {
 
         userRepo.save(user);
 
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to Timer. Please, visit next link: http://localhost:8080/activate/%s",
-                    user.getUsername(),
-                    user.getActivationCode()
-            );
-
-            mailSender.send(user.getEmail(), "Activation code", message);
-        }
+        sendMessage(user);
 
         return true;
     }
@@ -107,5 +110,58 @@ public class UserService implements UserDetailsService {
         user.setCompany(company);
         userRepo.save(user);
         return true;
+    }
+
+    public void updateProfile(User user, String password, String email, MultipartFile file) throws IOException {
+        String userEmail = user.getEmail();
+
+        boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
+                (userEmail != null && !userEmail.equals(email));
+
+        if (isEmailChanged) {
+            user.setEmail(email);
+
+            if (!StringUtils.isEmpty(email)) {
+                user.setActivationCode(UUID.randomUUID().toString());
+            }
+        }
+
+        if (!StringUtils.isEmpty(password)) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+
+            user.setImage(resultFilename);
+        }
+
+        userRepo.save(user);
+
+        if (isEmailChanged) {
+            sendMessage(user);
+        }
+    }
+
+    private void sendMessage(User user) {
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Timer. Please, visit next link: http://localhost:8080/activate/%s",
+                    user.getUsername(),
+                    user.getActivationCode()
+            );
+
+            mailSender.send(user.getEmail(), "Activation code", message);
+        }
     }
 }

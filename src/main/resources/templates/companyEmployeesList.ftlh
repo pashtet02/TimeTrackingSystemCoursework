@@ -6,8 +6,8 @@
     <div class="card-columns">
         <#list employees as employee>
             <div class="card my-3">
-                <#if employee.profilePhoto??>
-                    <img src="/img/${employee.profilePhoto}" class="card-img-top">
+                <#if employee.image??>
+                    <img src="/img/${employee.image}" class="card-img-top">
                 </#if>
                 <div class="m-2">
                     <ul class="list-group list-group-flush">
