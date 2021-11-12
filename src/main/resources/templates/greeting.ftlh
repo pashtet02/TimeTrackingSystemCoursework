@@ -1,4 +1,6 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
+
 <@c.page>
     <div class="page-wrap d-flex flex-row align-items-center">
         <div class="container">

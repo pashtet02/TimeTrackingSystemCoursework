@@ -11,9 +11,6 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/main">Main</a>
             </li>
             <#if isAdmin>
@@ -23,7 +20,7 @@
             </#if>
             <#if isEmployer>
                 <li class="nav-item">
-                    <a class="nav-link" href="/employer/invite">Invite users</a>
+                    <a class="nav-link" href="/employer/invite">Invite Employees</a>
                 </li>
             </#if>
             <#if isEmployer || hasCompany>

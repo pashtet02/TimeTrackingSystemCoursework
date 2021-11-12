@@ -28,6 +28,9 @@ public class UserService implements UserDetailsService {
     @Value("${upload.path}")
     private String uploadPath;
 
+    @Value("${my.hostname}")
+    private String hostname;
+
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final MailSender mailSender;
@@ -100,16 +103,15 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public boolean inviteUser(String code, String companyName) {
+    public void inviteUser(String code, String companyName) {
         User user = userRepo.findByInvitationCode(code);
         Company company = companyService.findByName(companyName).orElseThrow(CompanyNotFoundException::new);
         if (user == null) {
-            return false;
+            return;
         }
         user.setInvitationCode(null);
         user.setCompany(company);
         userRepo.save(user);
-        return true;
     }
 
     public void updateProfile(User user, String password, String email, MultipartFile file) throws IOException {
@@ -156,7 +158,7 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Timer. Please, visit next link: http://localhost:8080/activate/%s",
+                            "Welcome to Timer. Please, visit next link: http://" + hostname + "/activate/%s",
                     user.getUsername(),
                     user.getActivationCode()
             );

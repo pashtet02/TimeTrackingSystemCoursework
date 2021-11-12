@@ -72,10 +72,10 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <#if isEmployer>
+                                    <#--<#if isEmployer>
                                     <a class="btn btn-info " target="__blank"
                                        href="/company/edit/${company.id}">Edit</a>
-                                    </#if>
+                                    </#if>-->
                                 </div>
                             </div>
                         </div>

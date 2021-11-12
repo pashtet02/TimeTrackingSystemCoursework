@@ -8,9 +8,9 @@ import com.example.timetrackingsystem.service.CompanyService;
 import com.example.timetrackingsystem.service.MailSender;
 import com.example.timetrackingsystem.service.ReportService;
 import com.example.timetrackingsystem.service.UserService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,23 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@AllArgsConstructor
 @Slf4j
 @RequestMapping("/employer")
 public class EmployerController {
+    @Value("${my.hostname}")
+    private String hostname;
+
     private final UserService userService;
     private final MailSender mailSender;
     private final CompanyService companyService;
     private final ReportService reportService;
+
+    public EmployerController(UserService userService, MailSender mailSender, CompanyService companyService, ReportService reportService) {
+        this.userService = userService;
+        this.mailSender = mailSender;
+        this.companyService = companyService;
+        this.reportService = reportService;
+    }
 
     @GetMapping("/invite")
     @PreAuthorize("hasAuthority('EMPLOYER')")
@@ -54,8 +63,6 @@ public class EmployerController {
     @PreAuthorize("hasAuthority('EMPLOYER')")
     public String fireEmployee(@RequestParam("reason") String reason,
                                @PathVariable User employee){
-        employee.setCompany(null);
-        userService.save(employee);
         if (!StringUtils.isEmpty(employee.getEmail())) {
             String message = String.format(
                     "Dear, %s! \n" +
@@ -64,6 +71,8 @@ public class EmployerController {
 
             mailSender.send(employee.getEmail(), "Firing letter", message);
         }
+        employee.setCompany(null);
+        userService.save(employee);
         return "redirect:/company";
     }
 
@@ -75,7 +84,7 @@ public class EmployerController {
         if (!StringUtils.isEmpty(employee.getEmail())) {
             String message = String.format(
                     "Dear, %s! \n" +
-                            "Please, visit next link: http://localhost:8080/employer/invite/%s?company=%s to accept the invitation to the company: %s",
+                            "Please, visit next link: http://" + hostname + "/employer/invite/%s?company=%s to accept the invitation to the company: %s",
                     employee.getUsername(),
                     employee.getInvitationCode(),
                     companyName,
@@ -96,6 +105,7 @@ public class EmployerController {
 
         List<TimeReport> reports = reportService.getUserTimeReports(user.getId());
         model.addAttribute("reports", reports);
+        model.addAttribute("addReport", true);
 
         return "main";
     }

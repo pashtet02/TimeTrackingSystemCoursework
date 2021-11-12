@@ -1,7 +1,8 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
 
 <@c.page>
-    <h2>Company Creator</h2>
+    <h2>Create a your own Company</h2>
     <form action="/company" method="post" enctype="multipart/form-data">
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Company name:</label>

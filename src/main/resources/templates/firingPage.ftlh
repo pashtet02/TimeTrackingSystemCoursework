@@ -1,4 +1,6 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
+
 <@c.page>
     <h3>Fire a ${employee.firstName} ${employee.secondName}</h3>
 

@@ -7,7 +7,10 @@
         <#list employees as employee>
             <div class="card my-3">
                 <#if employee.image??>
-                    <img src="/img/${employee.image}" class="card-img-top">
+                    <img src="/img/${employee.image}" class="card-img-top" height="240">
+                <#else>
+                    <img src="https://png.pngitem.com/pimgs/s/517-5177724_vector-transparent-stock-icon-svg-profile-user-profile.png"
+                         class="card-img-top" width="70" height="240">
                 </#if>
                 <div class="m-2">
                     <ul class="list-group list-group-flush">
