@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
-import java.time.Instant;
-import java.time.temporal.TemporalField;
 import java.util.Calendar;
 
 @Controller
@@ -54,6 +52,9 @@ public class MainController {
             @RequestParam(name = "description") String description,
             @RequestParam(name = "isOvertime", required = false) Boolean isOvertime,
             @RequestParam(name = "reportType") String type) {
+        if (isOvertime == null){
+            isOvertime = false;
+        }
         Date createdAt = new Date(Calendar.getInstance().getTime().getTime());
 
         ReportType reportType;

@@ -48,7 +48,7 @@ public class PdfController {
             @PathVariable Long employeeId,
             @AuthenticationPrincipal User user,
             Model model) throws IOException, TemplateException {
-        Page<TimeReport> page = reportService.getUserTimeReports(employeeId, Pageable.ofSize(3));
+        Page<TimeReport> page = reportService.getUserTimeReports(employeeId, Pageable.ofSize(3000));
 
         model.addAttribute("page", page);
         model.addAttribute("user", user);
