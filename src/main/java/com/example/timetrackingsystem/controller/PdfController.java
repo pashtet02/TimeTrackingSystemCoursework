@@ -14,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,18 +43,15 @@ public class PdfController {
         this.reportService = reportService;
     }
 
-    /**
-     * This piece of s... code took more than 3 hours. I don`t have any emotional power to refactor this.
-     */
-    @GetMapping("{employee}")
+    @GetMapping("{employeeId}")
     public ResponseEntity<byte[]> downloadPdf(
-            @PathVariable User employee,
+            @PathVariable Long employeeId,
+            @AuthenticationPrincipal User user,
             Model model) throws IOException, TemplateException {
-        Iterable<TimeReport> reports;
-        reports = reportService.getUserTimeReports(employee.getId());
+        Page<TimeReport> page = reportService.getUserTimeReports(employeeId, Pageable.ofSize(3));
 
-        model.addAttribute("user", employee);
-        model.addAttribute("reports", reports);
+        model.addAttribute("page", page);
+        model.addAttribute("user", user);
         model.addAttribute("addReport", false);
         model.addAttribute("downloadReport", false);
 
@@ -64,13 +64,13 @@ public class PdfController {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         Map<String, Object> input = new HashMap<>();
-        input.put("user", employee);
-        input.put("reports", reports);
+        input.put("page", page);
+        input.put("user", user);
         input.put("addReport", false);
         input.put("downloadReport", false);
 
         Template template = cfg.getTemplate("mainToDownload.ftlh");
-        File file = new File("output.pdf");
+        File file = new File("report.pdf");
         Writer fileWriter = new FileWriter(file);
         System.out.println(template);
         template.process(input, fileWriter);

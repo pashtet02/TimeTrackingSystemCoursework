@@ -50,7 +50,7 @@
     </div>
     </#if>
     <#if downloadReport!false>
-        <a class="btn btn-primary" href="/download/${user.id}">Download reports</a>
+        <#if reports?has_content><a class="btn btn-primary" href="/download/${reports[0].author.id}">Download reports</a></#if>
     </#if>
     <div class="mt-2">
     <table class="table table-striped">

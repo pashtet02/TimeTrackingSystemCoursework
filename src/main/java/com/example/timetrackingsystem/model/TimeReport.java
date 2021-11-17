@@ -12,7 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Data
 @Builder
-public class TimeReport implements Serializable{
+public class TimeReport implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

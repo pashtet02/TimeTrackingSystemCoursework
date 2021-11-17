@@ -52,7 +52,7 @@ public class MainController {
             @AuthenticationPrincipal User user,
             @RequestParam Integer hours,
             @RequestParam(name = "description") String description,
-            @RequestParam(name = "isOvertime") Boolean isOvertime,
+            @RequestParam(name = "isOvertime", required = false) Boolean isOvertime,
             @RequestParam(name = "reportType") String type) {
         Date createdAt = new Date(Calendar.getInstance().getTime().getTime());
 

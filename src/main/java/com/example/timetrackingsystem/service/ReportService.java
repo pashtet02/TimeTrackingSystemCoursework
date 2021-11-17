@@ -5,6 +5,8 @@ import com.example.timetrackingsystem.model.User;
 import com.example.timetrackingsystem.repos.TimeReportRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,5 +35,9 @@ public List<TimeReport> getAllTimeReports(){
 
     public List<TimeReport> getUserTimeReports(long userId) {
     return timeReportRepo.findByAuthorId(userId);
+    }
+
+    public Page<TimeReport> getUserTimeReports(long userId, Pageable pageable){
+        return timeReportRepo.findByAuthorId(userId, pageable);
     }
 }
