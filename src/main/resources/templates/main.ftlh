@@ -1,68 +1,60 @@
 <#import "parts/common.ftlh" as c>
 <#import "parts/login.ftlh" as l>
-    <#include "parts/security.ftlh">
+<#include "parts/security.ftlh">
+<#import "/spring.ftl" as spring/>
 <@c.page>
-<#--<div class="form-row">
-    <div class="form-group col-md-6">
-        <form method="get" action="main">
-            <input class="form-control col-sm-3" type="number" min="0" max="24" name="filterHours"
-                   value="<#if filterHours??>${filterHours}</#if>">
-            <button type="submit" class="btn btn-primary ml-2">Find by hours</button>
-        </form>
-    </div>
-</div>-->
 
     <#if user.hasCompany() && addReport!true>
         <a class="btn btn-primary" data-toggle="collapse" href="#addReport" role="button" aria-expanded="false"
            aria-controls="collapseExample">
-            Create new report
+            <@spring.message "main.createReport"/>
         </a>
     <div class="collapse" id="addReport">
         <div class="form-group mt-3">
             <form method="post" action="/main">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="description" value="Regular activity" placeholder="Введіть опис">
+                    <input class="form-control" type="text" name="description" value="Regular activity" placeholder="<@spring.message "main.enterDesc"/>">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" min="0" max="24" type="number" value="8" name="hours" placeholder="Введіть кількість годин">
+                    <input class="form-control" min="0" max="24" type="number" value="8" name="hours" placeholder="<@spring.message "main.enterNumOfHours"/>">
                 </div>
                 <div class="form-group">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="isOvertime">
                         <label class="form-check-label" for="gridCheck">
-                            Overtime?
+                            <@spring.message "main.Overtime"/>
                         </label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label mr-1">Type: </label>
+                    <label class="col-sm-2 col-form-label mr-1"><@spring.message "main.type"/> </label>
                     <select class="form-control-sm-2" name="reportType">
-                        <option value="work">Work</option>
-                        <option value="vacation">Vacation</option>
-                        <option value="sickLeave">Sick leave</option>
-                        <option value="other">Other</option>
+                        <option value="work"><@spring.message "main.work"/></option>
+                        <option value="vacation"><@spring.message "main.vacation"/></option>
+                        <option value="sickLeave"><@spring.message "main.sickLeave"/></option>
+                        <option value="other"><@spring.message "main.other"/></option>
                     </select>
                 </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                <button class="btn btn-primary" type="submit">Create</button>
+                <button class="btn btn-primary" type="submit"><@spring.message "main.create"/></button>
             </form>
         </div>
     </div>
     </#if>
     <#if downloadReport!false>
-        <#if reports?has_content><a class="btn btn-primary" href="/download/${reports[0].author.id}">Download reports</a></#if>
+        <#if reports?has_content><a class="btn btn-primary" href="/download/${reports[0].author.id}"><@spring.message "main.donwloadReport"/></a></#if>
     </#if>
     <div class="mt-2">
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Creation Date</th>
-            <th scope="col">Activity type</th>
-            <th scope="col">Number of hours</th>
-            <th scope="col">Description</th>
-            <th scope="col">Overtime</th>
-            <th scope="col">Author</th>
+            <th scope="col"><@spring.message "main.hashtag"/></th>
+            <th scope="col"><@spring.message "main.creationDate"/></th>
+            <th scope="col"><@spring.message "main.ActivityType"/></th>
+            <th scope="col"><@spring.message "main.numOfHoursColumn"/></th>
+            <th scope="col"><@spring.message "main.descriptionColumn"/></th>
+            <th scope="col"><@spring.message "main.overtimeColumn"/></th>
+            <th scope="col"><@spring.message "main.author"/></th>
         </tr>
         </thead>
         <tbody>

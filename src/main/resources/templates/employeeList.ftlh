@@ -1,17 +1,18 @@
 <#import "parts/common.ftlh" as c>
 <#include "parts/security.ftlh">
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
-    <h2>Invite an employee</h2>
+    <h2><@spring.message "employeeList.header"/></h2>
     <div class="mt-2">
         <table class="table table-striped">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">NickName</th>
-                <th scope="col">First name</th>
-                <th scope="col">Second Name</th>
-                <th scope="col">Invite</th>
+                <th scope="col"><@spring.message "employeeList.hashTag"/></th>
+                <th scope="col"><@spring.message "employeeList.NickName"/></th>
+                <th scope="col"><@spring.message "employeeList.FirstName"/></th>
+                <th scope="col"><@spring.message "employeeList.SecondName"/></th>
+                <th scope="col"><@spring.message "employeeList.Invite"/></th>
             </tr>
             </thead>
             <tbody>
@@ -26,7 +27,7 @@
                               method="post">
                             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             <div>
-                                <input class="btn btn-primary btn-sm" type="submit" value="Invite employee"/>
+                                <input class="btn btn-primary btn-sm" type="submit" value="<@spring.message "employeeList.inviteButton"/>"/>
                             </div>
                         </form>
                     </th>

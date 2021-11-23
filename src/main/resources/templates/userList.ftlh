@@ -1,15 +1,16 @@
 <#import "parts/common.ftlh" as c>
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
-<h2>List of all application users</h2>
+<h2><@spring.message "userList.header"/></h2>
 <table>
     <thead>
     <tr>
-        <th>UserName</th>
-        <th>Role</th>
-        <th>Email</th>
-        <th>First Name</th>
-        <th>Second Name</th>
+        <th><@spring.message "userList.username"/></th>
+        <th><@spring.message "userList.Role"/></th>
+        <th><@spring.message "userList.Email"/></th>
+        <th><@spring.message "userList.FirstName"/></th>
+        <th><@spring.message "userList.SecondName"/></th>
         <th></th>
     </tr>
     </thead>
@@ -18,10 +19,10 @@
     <tr>
         <th>${user.username}</th>
         <th><#list user.roles as role>${role}<#sep>, </#list></th>
-        <th>email</th>
+        <th><#if user.email??>${user.email}</#if></th>
         <th><#if user.firstName??>${user.firstName}</#if></th>
         <th><#if user.secondName??>${user.secondName}</#if></th>
-        <th><a href="/user/${user.id}">edit</a></th>
+        <th><a class="btn btn-primary" href="/user/${user.id}"><@spring.message "userList.edit"/></a></th>
     </tr>
     </#list>
     </tbody>

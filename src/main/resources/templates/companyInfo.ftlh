@@ -1,5 +1,6 @@
 <#import "parts/common.ftlh" as c>
     <#include "parts/security.ftlh">
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
     <#if company??>
@@ -17,7 +18,7 @@
                                     <p class="text-secondary mb-1">${company.country}</p>
                                     <p class="text-muted font-size-sm">${company.director.firstName} ${company.director.secondName}</p>
                                     <a href="/company/employees?companyId=${company.id}"
-                                       class="btn btn-primary">Company employees</a>
+                                       class="btn btn-primary"><@spring.message "companyInfo.companyEmployee"/></a>
                                 </div>
                             </div>
                         </div>
@@ -45,7 +46,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0">Company Name</h6>
+                                    <h6 class="mb-0"><@spring.message "companyInfo.companyName"/></h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     ${company.name}
@@ -54,7 +55,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0">Email</h6>
+                                    <h6 class="mb-0"><@spring.message "companyInfo.Email"/></h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     ${company.email}
@@ -63,7 +64,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <h6 class="mb-0">Address</h6>
+                                    <h6 class="mb-0"><@spring.message "companyInfo.address"/></h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
                                     ${company.address}
@@ -85,6 +86,6 @@
     </div>
     </div>
     <#else>
-        <label>You don`t have a company yet! <a href="/company/create">Create a company!</a></label>
+        <label><@spring.message "companyInfo.noCompanyName"/> <a href="/company/create"><@spring.message "companyInfo.createCompanyButton"/></a></label>
     </#if>
 </@c.page>

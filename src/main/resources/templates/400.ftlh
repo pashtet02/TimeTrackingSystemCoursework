@@ -1,5 +1,6 @@
 <#import "parts/common.ftlh" as c>
 <#include "parts/security.ftlh">
+<#import "/spring.ftl" as spring/>
 <@c.page>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -10,10 +11,10 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">
-                    <span class="display-1 d-block">404</span>
-                    <div class="mb-4 lead">The page you are looking for was not found.<br>
+                    <span class="display-1 d-block"><@spring.message "errorPage.code"/></span>
+                    <div class="mb-4 lead"><@spring.message "errorPage.notFound"/><br>
                         <#if error??>${error}</#if></div>
-                    <a href="/" class="btn btn-link">Back to Home</a>
+                    <a href="/" class="btn btn-link"><@spring.message "errorPage.backToHome"/></a>
                 </div>
             </div>
         </div>

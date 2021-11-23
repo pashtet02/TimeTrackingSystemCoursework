@@ -1,7 +1,8 @@
 <#import "parts/common.ftlh" as c>
+<#import "/spring.ftl" as spring/>
 
 <@c.page>
-    <h2>User Editor</h2>
+    <h2><@spring.message "userEdit.header"/></h2>
     <form action="/user" method="post">
         <input type="text" name="username" value="${user.username}">
         <#list roles as role>
@@ -12,6 +13,6 @@
         </#list>
         <input type="hidden" value="${user.id}" name="userId">
         <input type="hidden" value="${_csrf.token}" name="_csrf">
-        <button type="submit">Save</button>
+        <button type="submit"><@spring.message "userEdit.saveButton"/></button>
     </form>
 </@c.page>
