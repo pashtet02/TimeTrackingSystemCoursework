@@ -1,5 +1,6 @@
 package com.example.timetrackingsystem.controller;
 
+import com.example.timetrackingsystem.exception.BadRequestParameterException;
 import com.example.timetrackingsystem.model.User;
 import com.example.timetrackingsystem.model.role.Role;
 import com.example.timetrackingsystem.service.UserService;
@@ -12,6 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -79,9 +84,15 @@ public class UserController {
     public String updateProfile(@AuthenticationPrincipal User user,
                                 @RequestParam String password,
                                 @RequestParam String email,
-                                @RequestParam(value = "image", required = false) MultipartFile file) throws IOException {
+                                @RequestParam(value = "image", required = false) MultipartFile file,
+                                @RequestParam(required = false) String language) throws IOException {
+        String langParam = "en";
+        if (language.equals("uk")){
+            langParam = "uk";
+        }
+
         userService.updateProfile(user, password, email, file);
-        return "redirect:profile";
+        return "redirect:/?lang=" + langParam;
 
     }
 }
